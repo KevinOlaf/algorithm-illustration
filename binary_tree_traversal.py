@@ -2,7 +2,18 @@
 import turtle
 from random import shuffle
 import time
+
+# Defining the constants.
+WIDTH = 1000
+HEIGHT = 800
+Y_OFFSET = HEIGHT / 4
+NODE_OFFSET_Y = (HEIGHT / 2 ) - 40
+ELEMENT_COUNT = 20
+
 class Node:
+    """
+    Collection of nodes of the terr to be traversed
+    """
     def __init__(self, val):
         self.val = val
         self.left = None
@@ -40,9 +51,9 @@ def draw_node(draw, draw2, node, x, y, dx, lst, _count=0):
         draw.goto(x, y)
         draw.dot(8, 'orange')
         draw.hideturtle()
-        
+        # Write node value
         draw.write(node.val, align='center', font=('Arial', 16, 'normal'))
-        
+        # Removing the visited node.
         lst[-1].remove(node.val)
         lst.append([])
         lst[-1].extend(lst[-2])
@@ -55,7 +66,7 @@ def draw_node(draw, draw2, node, x, y, dx, lst, _count=0):
         draw_node(draw,draw2, node.right, x+dx, y-60, dx/2, lst, _count+1)
 
 def draw_list(draw2, lst):
-    #draw2.clear()
+    # draw2.clear()
     y_offset = len(lst) * 16
     draw2.goto(-420, -10 - y_offset)
     if isinstance(lst[-1], list):
@@ -66,41 +77,36 @@ def draw_list(draw2, lst):
 if __name__ == '__main__':
     
     # Input list
-    for i in range(1, 5):
-        time.sleep(1)
-        print(i)
-    nums = list(range(1, 20))
+    nums = list(range(1, ELEMENT_COUNT))
     shuffle(nums)
 
     root = None
     for num in nums:
         root = insert(root, num)
 
-    
     inorder(root)
-
   
     h = height(root)
-    WIDTH = 1000
-    HEIGHT = 800
-    Y_OFFSET = HEIGHT / 4
-    NODE_OFFSET_Y = (HEIGHT / 2 ) - 40
+    
+    
     # Set up the window and its attributes
     turtle.setup(WIDTH, HEIGHT)
 
-    # Create a turtle for drawing
+    # Create 2 instances of turtle for drawing,
+    # one for drawing tree and the other for writing the updating list.
     draw = turtle.Turtle()
     draw2 = turtle.Turtle()
+    # Penup the turtle so it not draw trailing lines while moving.
     draw.penup()
     draw2.penup()
+    # Adjust moving speed
     draw.speed(3)
-    draw2.hideturtle()
     
     draw.showturtle()
     
-    
-
-# Draw the tree
+    # Not show turtle for the list updating drawer.
+    draw2.hideturtle()
+    # Draw the tree
     draw_node(draw, draw2, root, 0, NODE_OFFSET_Y, 200, [nums.copy()])
     draw_list(draw2, nums)
 
