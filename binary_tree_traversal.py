@@ -1,3 +1,4 @@
+# This algorithm is a specific case of the DFS algorithm family.
 import turtle
 from random import shuffle
 import time
